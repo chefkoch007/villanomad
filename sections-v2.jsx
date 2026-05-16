@@ -561,7 +561,7 @@ function VillaTour() {
         </div>
         <div className="villa-tour-video" data-reveal="right" style={{ '--rd': '120ms' }}>
           <video autoPlay loop muted playsInline>
-            <source src="Bilder Franz Website/Video/IMG_3836.mp4" type="video/mp4" />
+            <source src="Bilder Franz Website/Video/villa-tour.mp4" type="video/mp4" />
           </video>
         </div>
       </div>
