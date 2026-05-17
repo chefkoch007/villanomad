@@ -59,46 +59,66 @@ function useTypewriter() {
   React.useEffect(() => {
     const el = document.querySelector('.hero-title.typewriter');
     if (!el) return;
-    const parts = [
-      { text: 'VILLA NOMAD ', italic: false },
+
+    const words = [
+      { text: 'VILLA', italic: false },
+      { text: 'NOMAD', italic: false },
       { text: 'Dahab', italic: true }
     ];
+
     el.innerHTML = '';
     el.style.visibility = 'visible';
-    let partIdx = 0;
-    let charIdx = 0;
-    const cursor = document.createElement('span');
-    cursor.className = 'tw-cursor';
-    cursor.textContent = '|';
-    el.appendChild(cursor);
 
-    function type() {
-      if (partIdx >= parts.length) {
-        // Done — fade out cursor
-        cursor.classList.add('tw-done');
-        return;
+    // Build letter spans for each word
+    const allLetters = [];
+    words.forEach((word, wi) => {
+      const wrap = document.createElement(word.italic ? 'em' : 'span');
+      wrap.className = 'tw-word';
+      word.text.split('').forEach((ch) => {
+        const letter = document.createElement('span');
+        letter.className = 'tw-letter';
+        letter.textContent = ch;
+        wrap.appendChild(letter);
+        allLetters.push({ el: letter, wordIdx: wi });
+      });
+      el.appendChild(wrap);
+      // Add space between words (except after last)
+      if (wi < words.length - 1) {
+        const space = document.createElement('span');
+        space.className = 'tw-space';
+        space.innerHTML = '&nbsp;';
+        el.appendChild(space);
       }
-      const part = parts[partIdx];
-      const char = part.text[charIdx];
-      // Get or create the current span/em
-      let wrap = el.querySelector(`[data-tw="${partIdx}"]`);
-      if (!wrap) {
-        wrap = document.createElement(part.italic ? 'em' : 'span');
-        wrap.setAttribute('data-tw', partIdx);
-        el.insertBefore(wrap, cursor);
-      }
-      wrap.textContent += char;
-      charIdx++;
-      if (charIdx >= part.text.length) {
-        partIdx++;
-        charIdx = 0;
-      }
-      setTimeout(type, 55 + Math.random() * 30);
-    }
+    });
 
-    // Small delay before starting
-    const t = setTimeout(type, 400);
-    return () => clearTimeout(t);
+    // Add shimmer overlay for the final sweep
+    const shimmer = document.createElement('span');
+    shimmer.className = 'tw-shimmer';
+    el.appendChild(shimmer);
+
+    // Animate letters in sequence with pauses between words
+    let delay = 800; // initial pause
+    let lastWord = 0;
+    allLetters.forEach((item, i) => {
+      // Pause between words
+      if (item.wordIdx > lastWord) {
+        delay += 280;
+        lastWord = item.wordIdx;
+      }
+      setTimeout(() => {
+        item.el.classList.add('tw-visible');
+      }, delay);
+      // Slower for italic "Dahab", slightly varied otherwise
+      const isItalic = item.wordIdx === 2;
+      delay += isItalic ? 110 : (75 + Math.random() * 35);
+    });
+
+    // Final shimmer sweep after all letters are in
+    setTimeout(() => {
+      shimmer.classList.add('tw-sweep');
+    }, delay + 300);
+
+    return () => {};
   }, []);
 }
 
