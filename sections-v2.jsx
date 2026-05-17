@@ -1,5 +1,5 @@
 /* eslint-disable */
-/* Villa Dahab Nomad — sections v2 */
+/* Villa Nomad Dahab — sections v2 */
 
 const AIRBNB_URL = "https://www.airbnb.de/rooms/1678802870553109690?unique_share_id=1e95772f-9461-46d0-8f32-02cd07ca52fd&viralityEntryPoint=1&s=76&source_impression_id=p3_1778677642_P3T--i2akjxz0SVt";
 const GOOGLE_URL = "https://www.google.com/maps/place/Dahab+Villa+Nomad/@28.5104548,34.5087084,784m/data=!3m2!1e3!4b1!4m11!1m4!8m3!1e1!3m1!1e1!3m5!1s0x15ab4b52a6c8c355:0x5248df358741faeb!8m2!3d28.5104548!4d34.5112833!16s%2Fg%2F11z1sz85jj";
@@ -51,6 +51,54 @@ function useHeroParallax() {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+}
+
+/* ---------- Typewriter effect on hero title ---------- */
+function useTypewriter() {
+  React.useEffect(() => {
+    const el = document.querySelector('.hero-title.typewriter');
+    if (!el) return;
+    const parts = [
+      { text: 'VILLA NOMAD ', italic: false },
+      { text: 'Dahab', italic: true }
+    ];
+    el.innerHTML = '';
+    el.style.visibility = 'visible';
+    let partIdx = 0;
+    let charIdx = 0;
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    cursor.textContent = '|';
+    el.appendChild(cursor);
+
+    function type() {
+      if (partIdx >= parts.length) {
+        // Done — fade out cursor
+        cursor.classList.add('tw-done');
+        return;
+      }
+      const part = parts[partIdx];
+      const char = part.text[charIdx];
+      // Get or create the current span/em
+      let wrap = el.querySelector(`[data-tw="${partIdx}"]`);
+      if (!wrap) {
+        wrap = document.createElement(part.italic ? 'em' : 'span');
+        wrap.setAttribute('data-tw', partIdx);
+        el.insertBefore(wrap, cursor);
+      }
+      wrap.textContent += char;
+      charIdx++;
+      if (charIdx >= part.text.length) {
+        partIdx++;
+        charIdx = 0;
+      }
+      setTimeout(type, 55 + Math.random() * 30);
+    }
+
+    // Small delay before starting
+    const t = setTimeout(type, 400);
+    return () => clearTimeout(t);
   }, []);
 }
 
@@ -275,10 +323,10 @@ function Header() {
   return (
     <header className="header">
       <div className="header-inner">
-        <a href="#top" className="brand" aria-label="Villa Dahab Nomad">
-          <span className="brand-name">Villa Dahab</span>
+        <a href="#top" className="brand" aria-label="Villa Nomad Dahab">
+          <span className="brand-name">Villa Nomad</span>
           <span className="brand-wave"><Ico.wave /></span>
-          <span className="brand-name" style={{ fontStyle: 'italic', fontFamily: 'var(--serif)', textTransform: 'none', letterSpacing: '0.02em', fontSize: 13 }}>nomad</span>
+          <span className="brand-name" style={{ fontStyle: 'italic', fontFamily: 'var(--serif)', textTransform: 'none', letterSpacing: '0.02em', fontSize: 13 }}>Dahab</span>
         </a>
         <nav className={`nav ${menuOpen ? 'nav-open' : ''}`}>
           <a href="#villa" onClick={() => setMenuOpen(false)}>Villa</a>
@@ -302,10 +350,11 @@ function Header() {
 
 /* ---------- Hero ---------- */
 function Hero() {
+  useTypewriter();
   return (
     <section className="hero" id="top">
       <div className="hero-frame">
-        <img className="hero-img" src="Bilder Franz Website/Hero/Hero Image.jpg" alt="Villa Dahab Nomad" />
+        <img className="hero-img" src="Bilder Franz Website/Hero/Hero Image.jpg" alt="Villa Nomad Dahab" />
         <div className="hero-tint"></div>
         <div className="hero-vignette"></div>
 
@@ -316,7 +365,7 @@ function Hero() {
             <span className="htop-r">EST. 2024</span>
           </div>
           <div className="hero-center">
-            <h1 className="hero-title">VILLA DAHAB <em>nomad</em></h1>
+            <h1 className="hero-title typewriter" aria-label="VILLA NOMAD Dahab"></h1>
             <p className="hero-sub">
               A private retreat between desert and sea —
               three bedrooms, a quiet pool, a whirlpool under the stars.
@@ -355,7 +404,7 @@ function Intro() {
         </div>
         <div className="intro-right" data-reveal="right" style={{ '--rd': '120ms' }}>
           <p className="lead">
-            Villa Dahab Nomad is a private home built for travellers who want more
+            Villa Nomad Dahab is a private home built for travellers who want more
             than a hotel. Wake up to the sound of a quiet pool, breakfast on the
             sun deck, drift into the village for fresh juice, and end the day in
             the whirlpool under a sky thick with stars.
@@ -474,7 +523,7 @@ function Host() {
           <p>Stay with us and you tap into all of it. No upsells, no commissions — just the network.</p>
           <div className="host-sign">
             — Franz Balazs
-            <small>Founder · Villa Dahab Nomad</small>
+            <small>Founder · Villa Nomad Dahab</small>
           </div>
         </div>
       </div>
@@ -654,7 +703,7 @@ function Footer() {
     <footer className="footer">
       <div className="footer-top">
         <div className="footer-brand">
-          <div className="serif">Villa Dahab <em>Nomad</em></div>
+          <div className="serif">Villa Nomad <em>Dahab</em></div>
           <p>A private retreat in Mashraba, Dahab — South Sinai, Egypt. Bookings handled through Airbnb.</p>
         </div>
         <div className="footer-col">
@@ -677,14 +726,14 @@ function Footer() {
         </div>
       </div>
       <div className="footer-bot">
-        <span>&copy; 2026 Villa Dahab Nomad</span>
+        <span>&copy; 2026 Villa Nomad Dahab</span>
         <span>Dahab · 28°30'N 34°31'E</span>
         <span>Made with care in Sinai</span>
       </div>
 
       <Dialog open={impressum} onClose={() => setImpressum(false)} title="Impressum">
         <p><strong>Angaben gemäß § 5 TMG</strong></p>
-        <p>Villa Dahab Nomad<br/>Mashraba, Dahab<br/>South Sinai, Egypt</p>
+        <p>Villa Nomad Dahab<br/>Mashraba, Dahab<br/>South Sinai, Egypt</p>
         <p><strong>Vertreten durch:</strong><br/>[Name des Betreibers]</p>
         <p><strong>Kontakt:</strong><br/>E-Mail: [E-Mail-Adresse]<br/>Telefon: [Telefonnummer]</p>
         <p><strong>Haftungsausschluss:</strong></p>
