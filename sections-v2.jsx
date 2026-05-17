@@ -54,73 +54,6 @@ function useHeroParallax() {
   }, []);
 }
 
-/* ---------- Typewriter effect on hero title ---------- */
-function useTypewriter() {
-  React.useEffect(() => {
-    const el = document.querySelector('.hero-title.typewriter');
-    if (!el) return;
-
-    const words = [
-      { text: 'VILLA', italic: false },
-      { text: 'NOMAD', italic: false },
-      { text: 'Dahab', italic: true }
-    ];
-
-    el.innerHTML = '';
-    el.style.visibility = 'visible';
-
-    // Build letter spans for each word
-    const allLetters = [];
-    words.forEach((word, wi) => {
-      const wrap = document.createElement(word.italic ? 'em' : 'span');
-      wrap.className = 'tw-word';
-      word.text.split('').forEach((ch) => {
-        const letter = document.createElement('span');
-        letter.className = 'tw-letter';
-        letter.textContent = ch;
-        wrap.appendChild(letter);
-        allLetters.push({ el: letter, wordIdx: wi });
-      });
-      el.appendChild(wrap);
-      // Add space between words (except after last)
-      if (wi < words.length - 1) {
-        const space = document.createElement('span');
-        space.className = 'tw-space';
-        space.innerHTML = '&nbsp;';
-        el.appendChild(space);
-      }
-    });
-
-    // Add shimmer overlay for the final sweep
-    const shimmer = document.createElement('span');
-    shimmer.className = 'tw-shimmer';
-    el.appendChild(shimmer);
-
-    // Animate letters in sequence with pauses between words
-    let delay = 800; // initial pause
-    let lastWord = 0;
-    allLetters.forEach((item, i) => {
-      // Pause between words
-      if (item.wordIdx > lastWord) {
-        delay += 280;
-        lastWord = item.wordIdx;
-      }
-      setTimeout(() => {
-        item.el.classList.add('tw-visible');
-      }, delay);
-      // Slower for italic "Dahab", slightly varied otherwise
-      const isItalic = item.wordIdx === 2;
-      delay += isItalic ? 110 : (75 + Math.random() * 35);
-    });
-
-    // Final shimmer sweep after all letters are in
-    setTimeout(() => {
-      shimmer.classList.add('tw-sweep');
-    }, delay + 300);
-
-    return () => {};
-  }, []);
-}
 
 /* ---------- Icons ---------- */
 const Ico = {
@@ -370,7 +303,6 @@ function Header() {
 
 /* ---------- Hero ---------- */
 function Hero() {
-  useTypewriter();
   return (
     <section className="hero" id="top">
       <div className="hero-frame">
@@ -385,7 +317,7 @@ function Hero() {
             <span className="htop-r">EST. 2024</span>
           </div>
           <div className="hero-center">
-            <h1 className="hero-title typewriter" aria-label="VILLA NOMAD Dahab"></h1>
+            <h1 className="hero-title fade-up">VILLA NOMAD <em>Dahab</em></h1>
             <p className="hero-sub">
               A private retreat between desert and sea —
               three bedrooms, a quiet pool, a whirlpool under the stars.
